@@ -2,26 +2,14 @@
 
 const express = require('express');
 const router = express.Router();
+const sendJsonResult = require('../libs/standardJSONResultHelper').sendJsonResult;
 
-function sendJsonResult(_res) {
-    return {
-        accept: _payload => {
-            _res.send({
-                success: true,
-                msg: null,
-                payload: _payload
-            });
-        },
-        reject: _error => {
-            _res.send({
-                success: false,
-                msg: _error.message
-            });
-        }
-    };
-}
+// use a thin wrapper for JWT so the secret can be configured in a single common location.
+const getJWTWithCommonSecret = require('../libs/jwtWrapper').getJWTWithCommonSecret;
 
-router.get('/', (_req, _res) => {
+//router.use(jwt());
+
+router.get('/', getJWTWithCommonSecret(), (_req, _res) => {
     const jsonResultWrapper = sendJsonResult(_res);
 
     jsonResultWrapper.accept('ok');

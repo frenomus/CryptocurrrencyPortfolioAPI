@@ -7,6 +7,7 @@ const LogManager = require('./libs/LogManager');
 const morgan = require('morgan');
 const HOSTNAME = require('os').hostname();
 const app = express();
+const db = require('./libs/linkWithDB');
 
 //Needs to be populated when in production mode to restrict which sites can access this API
 const corsWhitelist = [];
@@ -36,10 +37,11 @@ if (app.get('env') === 'development') {
 
 app.prepareForListen = () => {
     // Placeholder for now to enable init of DB later
-    return Promise.resolve();
+    return db.initDb();
 };
 
 app.use('/', require('./routes/main'));
+app.use('/auth', require('./routes/auth'));
 
 // catch 404 and forward to error handler
 app.use(function e404(req, res, next) {
