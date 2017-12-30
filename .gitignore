@@ -1,0 +1,11 @@
+node_modules
+npm-debug.log
+.idea/workspace.xml
+.idea/dictionaries
+.idea/watcherTasks.xml
+.idea/dbnavigator.xml
+local/*
+!/local/logs/
+/local/logs/*
+!/local/logs/.gitkeep
+.nyc_output

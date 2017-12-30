@@ -1,0 +1,71 @@
+#!/usr/bin/env node
+
+'use strict';
+
+/**
+ * Wrapper for running the app on required ports and logging errors with getting started.
+ */
+
+const app = require('../main');
+const port = normalizePort(process.env.PORT || '3000');
+const LogManager = require('../libs/LogManager');
+
+app.set('port', port);
+const http = require('http');
+const server = http.createServer(app);
+
+var appName = require('../../package').name;
+
+if (appName.indexOf('/') !== -1) {
+    appName = appName.split('/')[1];
+}
+
+
+function normalizePort(val) {
+    var port = parseInt(val, 10);
+
+    return isNaN(port) ? val :
+        port >= 0 ? port : false;
+}
+
+function onError(error) {
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
+
+    var bind = (typeof port === 'string' ? 'Pipe ' : 'Port ') + port;
+
+    if (error.code === 'EACCESS') {
+        LogManager.getInstance('default').error(`${bind} requires elevated privileges`);
+
+        return process.exit(1);
+    }
+
+    if (error.code === 'EADDRINUSE') {
+        //eslint-disable-next-line no-console
+        LogManager.getInstance('default').error(`${bind} is already in use`);
+
+        return process.exit(1);
+    }
+
+    throw error;
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+    var addr = server.address();
+    var bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
+
+    LogManager.getInstance('default').info(`Listening on ${bind}`);
+}
+
+app.prepareForListen().then(() => {
+    server.listen(port);
+    server.on('error', onError);
+    server.on('listening', onListening);
+}).catch(_err => {
+    LogManager.getInstance('default').error(_err);
+});
