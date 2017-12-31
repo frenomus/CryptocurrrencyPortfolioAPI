@@ -43,6 +43,12 @@ function linkModelsAndControllersWithDB(_instanceName, _prefix = '') {
     _instance.registerModel(`${_prefix}api.users`, require('../models/Users'), `${_prefix}users`);
     _instance.registerController(`${_prefix}api.users`,
         require('../controllers/Users'), `${_prefix}api.users`);
+
+    //portfolio
+    _instance.registerModel(`${_prefix}api.portfolios`,
+        require('../models/Portfolio'), `${_prefix}portfolios`);
+    _instance.registerController(`${_prefix}api.portfolios`,
+        require('../controllers/Portfolio'), `${_prefix}api.portfolios`);
 }
 
 function getController(_controllerName, _prefix = '') {

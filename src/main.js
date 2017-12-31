@@ -42,6 +42,7 @@ app.prepareForListen = () => {
 
 app.use('/', require('./routes/main'));
 app.use('/auth', require('./routes/auth'));
+app.use('/portfolio', require('./routes/portfolio'));
 
 // catch 404 and forward to error handler
 app.use(function e404(req, res, next) {
