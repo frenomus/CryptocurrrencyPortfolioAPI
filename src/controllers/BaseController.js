@@ -24,9 +24,13 @@ class BaseController {
     }
 
     _create(_values, _query, _transaction) {
-        if (!_.isNil(_transaction)) {
-            _query.transaction = _transaction;
+        if (_.isNil(_transaction)) {
+            return this.model.sequelize.transaction(_transaction => {
+                return this._create(_values, _query, _transaction);
+            });
         }
+
+        _query.transaction = _transaction;
 
         return this.model.create(_values, _query).then(_result => {
             if (_result instanceof this.model.sequelize.ValidationError) {
@@ -50,19 +54,41 @@ class BaseController {
     }
 
     _update(_values, _query, _transaction) {
-        if (!_.isNil(_transaction)) {
-            _query.transaction = _transaction;
+        if (_.isNil(_transaction)) {
+            return this.model.sequelize.transaction(_transaction => {
+                return this._update(_values, _query, _transaction);
+            });
         }
+
+        _query.transaction = _transaction;
 
         return this.model.update(_values, _query).then(_result => {
             BaseController.shouldUpdateOnlyOne(_result, _query);
         });
     }
 
-    _updateMany(_values, _query, _transaction) {
-        if (!_.isNil(_transaction)) {
-            _query.transaction = _transaction;
+    _destroy(_query, _transaction) {
+        if (_.isNil(_transaction)) {
+            return this.model.sequelize.transaction(_transaction => {
+                return this._destroy(_query, _transaction);
+            });
         }
+
+        _query.transaction = _transaction;
+
+        return this.model.destroy(_query).then(_result => {
+            BaseController.shouldUpdateOnlyOne(_result, _query);
+        });
+    }
+
+    _updateMany(_values, _query, _transaction) {
+        if (_.isNil(_transaction)) {
+            return this.model.sequelize.transaction(_transaction => {
+                return this._updateMany(_values, _query, _transaction);
+            });
+        }
+
+        _query.transaction = _transaction;
 
         return this.model.update(_values, _query).then(_result => {
             if (_result[0] === 0) {

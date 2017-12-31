@@ -69,7 +69,7 @@ class UserController extends BaseController {
         return this._update({
             email: _email,
             emailHash: this.constructor._createEmailHash(_email, this._emailHashSalt)
-        }, { id: _id }, _transaction);
+        }, { where: { id: _id } }, _transaction);
     }
 
     changePassword(_id, _oldPassword, _newPassword, _transaction) {
@@ -94,7 +94,7 @@ class UserController extends BaseController {
             return this._update({
                 password: this.constructor._encryptPasswordValue(_newSalt, _newPassword),
                 salt: _newSalt
-            }, { id: _id }, _transaction);
+            }, { where: { id: _id } }, _transaction);
         });
     }
 
@@ -107,7 +107,7 @@ class UserController extends BaseController {
 
         _data[_flagName] = _bTrue;
 
-        return this._update(_data, { id: _id }, _transaction);
+        return this._update(_data, { where: { id: _id } }, _transaction);
     }
 
     _checkPasswordValid(_salt, _password, _passwordHash) {
