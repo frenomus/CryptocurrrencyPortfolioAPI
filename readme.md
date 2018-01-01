@@ -37,7 +37,7 @@ or providing the relevant ENV overrides.
 node src/bin/www
 ```
 
-## Run (production test)
+## Run (production or with already encrypted data)
 ```
 export TZ=utc
 ENCRYPTION_KEY=#INSERT_64CHAR_ENCRYPTION_KEY_HERE# NODE_ENV=production node src/bin/www
