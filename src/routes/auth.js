@@ -22,6 +22,9 @@ router.post('/register', (_req, _res) => {
     }
 
     return db.getController('users').add(_req.body.email, _req.body.password)
+        .then(_user => {
+            return { token: jwtWrapper.issueJWT({ id: _user.id }) };
+        })
         .then(jsonResultWrapper.accept)
         .catch(jsonResultWrapper.reject);
 });
@@ -39,7 +42,7 @@ router.post('/login', (_req, _res) => {
 
     return db.getController('users').authenticate(_req.body.email, _req.body.password)
         .then(_user => {
-            return { token: jwtWrapper.issueJWT({ user: _user.id }) };
+            return { token: jwtWrapper.issueJWT({ id: _user.id }) };
         })
         .then(jsonResultWrapper.accept)
         .catch(jsonResultWrapper.reject);
