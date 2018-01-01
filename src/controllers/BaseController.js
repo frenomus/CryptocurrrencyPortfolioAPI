@@ -67,7 +67,7 @@ class BaseController {
         });
     }
 
-    _destroy(_query, _transaction) {
+    _destroyOne(_query, _transaction) {
         if (_.isNil(_transaction)) {
             return this.model.sequelize.transaction(_transaction => {
                 return this._destroy(_query, _transaction);
@@ -77,7 +77,7 @@ class BaseController {
         _query.transaction = _transaction;
 
         return this.model.destroy(_query).then(_result => {
-            BaseController.shouldUpdateOnlyOne(_result, _query);
+            BaseController.shouldUpdateOnlyOne([_result], _query);
         });
     }
 

@@ -46,7 +46,7 @@ class PortfolioController extends BaseController {
             currencyId: _currencyId
         };
 
-        return this._destroy({ where: _where }, _transaction);
+        return this._destroyOne({ where: _where }, _transaction);
     }
 
     getById(_id, _transaction) {

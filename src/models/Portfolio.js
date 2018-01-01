@@ -24,7 +24,7 @@ function Portfolio(_sequelize, _modelName) {
             unique: 'holding'
         },
         value: {
-            type: new _sequelize.Sequelize.DECIMAL(),
+            type: new _sequelize.Sequelize.DECIMAL(10, 2),
             allowNull: false
         }
     };

@@ -52,4 +52,13 @@ router.put('/:portfolioId/:currencyId', jwtWrapper.getJWTWithCommonSecret(), (_r
         .catch(jsonResultWrapper.reject);
 });
 
+router.delete('/:portfolioId/:currencyId', jwtWrapper.getJWTWithCommonSecret(), (_req, _res) => {
+    const jsonResultWrapper = sendJsonResult(_res);
+
+    return db.getController('portfolios')
+        .delete(_req.user.id, _req.params.portfolioId, _req.params.currencyId)
+        .then(jsonResultWrapper.accept)
+        .catch(jsonResultWrapper.reject);
+});
+
 module.exports = router;
